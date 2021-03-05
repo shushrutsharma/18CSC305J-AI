@@ -14,3 +14,6 @@ def bfs(forest, sr, sc, tr, tc):
                 seen.add((nr, nc))
                 queue.append((nr, nc, d+1))
     return -1
+
+
+bfs([1,2,3],[0,0,4],[7,6,5])
