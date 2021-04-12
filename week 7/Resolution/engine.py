@@ -1,4 +1,3 @@
-  
 import copy
 import time
 
@@ -250,7 +249,7 @@ def printOutput(filename, results):
 
 
 if __name__ == '__main__':
-    inputQueries_, inputSentences_ = getInput("input.txt")
+    inputQueries_, inputSentences_ = getInput('./input.txt')
     knowledgeBase = KB(inputSentences_)
     knowledgeBase.prepareKB()
     results_ = knowledgeBase.askQueries(inputQueries_)
