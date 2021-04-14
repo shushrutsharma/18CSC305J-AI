@@ -1,10 +1,5 @@
 def get_index_comma(string):
-    """
-    Return index of commas in string
-    """
-
     index_list = list()
-    # Count open parentheses
     par_count = 0
 
     for i in range(len(string)):
@@ -19,10 +14,6 @@ def get_index_comma(string):
 
 
 def is_variable(expr):
-    """
-    Check if expression is variable
-    """
-
     for i in expr:
         if i == '(' or i == ')':
             return False
@@ -31,36 +22,16 @@ def is_variable(expr):
 
 
 def process_expression(expr):
-    """
-    input:  - expression:
-            'Q(a, g(x, b), f(y))'
-    return: - predicate symbol:
-            Q
-            - list of arguments
-            ['a', 'g(x, b)', 'f(y)']
-    """
-
-    # Remove space in expression
     expr = expr.replace(' ', '')
-
-    # Find the first index == '('
     index = None
     for i in range(len(expr)):
         if expr[i] == '(':
             index = i
             break
-
-    # Return predicate symbol and remove predicate symbol in expression
     predicate_symbol = expr[:index]
     expr = expr.replace(predicate_symbol, '')
-
-    # Remove '(' in the first index and ')' in the last index
     expr = expr[1:len(expr) - 1]
-
-    # List of arguments
     arg_list = list()
-
-    # Split string with commas, return list of arguments
     indices = get_index_comma(expr)
 
     if len(indices) == 0:
@@ -75,13 +46,6 @@ def process_expression(expr):
 
 
 def get_arg_list(expr):
-    """
-    input:  expression:
-            'Q(a, g(x, b), f(y))'
-    return: full list of arguments:
-            ['a', 'x', 'b', 'y']
-    """
-
     _, arg_list = process_expression(expr)
 
     flag = True
@@ -101,10 +65,6 @@ def get_arg_list(expr):
 
 
 def check_occurs(var, expr):
-    """
-    Check if var occurs in expr
-    """
-
     arg_list = get_arg_list(expr)
     if var in arg_list:
         return True
@@ -113,8 +73,7 @@ def check_occurs(var, expr):
 
 
 def unify(expr1, expr2):
-    
-    # Step 1:
+
     if is_variable(expr1) and is_variable(expr2):
         if expr1 == expr2:
             return 'Null'
@@ -167,14 +126,14 @@ def unify(expr1, expr2):
 
 if __name__ == '__main__':
     
-    # f1 = 'Q(a, g(x, a), f(y))'
-    # f2 = 'Q(a, g(f(b), a), x)'
-    f1 = input('f1 : ')
-    f2 = input('f2 : ')
+    f1 = 'Q(a, g(x, a), f(y))'
+    f2 = 'Q(a, g(f(b), a), x)'
+    # f1 = input('f1 : ')
+    # f2 = input('f2 : ')
 
     result = unify(f1, f2)
     if not result:
-        print('Unification failed!')
+        print('The process of Unification failed!')
     else:
-        print('Unification successful!')
+        print('The process of Unification successful!')
         print(result)

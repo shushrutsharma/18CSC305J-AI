@@ -1,6 +1,7 @@
 import copy
 import time
 
+
 class Parameter:
     variable_count = 1
 
@@ -25,6 +26,7 @@ class Parameter:
 
     def __str__(self):
         return self.name
+
 
 class Predicate:
     def __init__(self, name, params):
@@ -92,6 +94,7 @@ class Sentence:
     def __str__(self):
         return "".join([str(predicate) for predicate in self.predicates])
 
+
 class KB:
     def __init__(self, inputSentences):
         self.inputSentences = [x.replace(" ", "") for x in inputSentences]
@@ -103,12 +106,15 @@ class KB:
         for sentence_string in self.inputSentences:
             sentence = Sentence(sentence_string)
             for predicate in sentence.getPredicates():
-                self.sentence_map[predicate] = self.sentence_map.get(predicate, []) + [sentence]
+                self.sentence_map[predicate] = self.sentence_map.get(
+                    predicate, []) + [sentence]
 
     def convertSentencesToCNF(self):
         for sentenceIdx in range(len(self.inputSentences)):
-            if "=>" in self.inputSentences[sentenceIdx]:  # Do negation of the Premise and add them as literal
-                self.inputSentences[sentenceIdx] = negateAntecedent(self.inputSentences[sentenceIdx])
+            # Do negation of the Premise and add them as literal
+            if "=>" in self.inputSentences[sentenceIdx]:
+                self.inputSentences[sentenceIdx] = negateAntecedent(
+                    self.inputSentences[sentenceIdx])
 
     def askQueries(self, queryList):
         results = []
@@ -117,11 +123,13 @@ class KB:
             negatedQuery = Sentence(negatePredicate(query.replace(" ", "")))
             negatedPredicate = negatedQuery.predicates[0]
             prev_sentence_map = copy.deepcopy(self.sentence_map)
-            self.sentence_map[negatedPredicate.name] = self.sentence_map.get(negatedPredicate.name, []) + [negatedQuery]
+            self.sentence_map[negatedPredicate.name] = self.sentence_map.get(
+                negatedPredicate.name, []) + [negatedQuery]
             self.timeLimit = time.time() + 40
 
             try:
-                result = self.resolve([negatedPredicate], [False]*(len(self.inputSentences) + 1))
+                result = self.resolve([negatedPredicate], [
+                                      False]*(len(self.inputSentences) + 1))
             except:
                 result = False
 
@@ -149,7 +157,8 @@ class KB:
                     if not visited[kb_sentence.sentence_index]:
                         for kbPredicate in kb_sentence.findPredicates(queryPredicateName):
 
-                            canUnify, substitution = performUnification(copy.deepcopy(queryPredicate), copy.deepcopy(kbPredicate))
+                            canUnify, substitution = performUnification(
+                                copy.deepcopy(queryPredicate), copy.deepcopy(kbPredicate))
 
                             if canUnify:
                                 newSentence = copy.deepcopy(kb_sentence)
@@ -161,14 +170,16 @@ class KB:
                                         if old in newSentence.variable_map:
                                             parameter = newSentence.variable_map[old]
                                             newSentence.variable_map.pop(old)
-                                            parameter.unify("Variable" if new[0].islower() else "Constant", new)
+                                            parameter.unify(
+                                                "Variable" if new[0].islower() else "Constant", new)
                                             newSentence.variable_map[new] = parameter
 
                                     for predicate in newQueryStack:
                                         for index, param in enumerate(predicate.params):
                                             if param.name in substitution:
                                                 new = substitution[param.name]
-                                                predicate.params[index].unify("Variable" if new[0].islower() else "Constant", new)
+                                                predicate.params[index].unify(
+                                                    "Variable" if new[0].islower() else "Constant", new)
 
                                 for predicate in newSentence.predicates:
                                     newQueryStack.append(predicate)
@@ -235,7 +246,8 @@ def getInput(filename):
         noOfQueries = int(file.readline().strip())
         inputQueries = [file.readline().strip() for _ in range(noOfQueries)]
         noOfSentences = int(file.readline().strip())
-        inputSentences = [file.readline().strip() for _ in range(noOfSentences)]
+        inputSentences = [file.readline().strip()
+                          for _ in range(noOfSentences)]
         return inputQueries, inputSentences
 
 
@@ -249,7 +261,7 @@ def printOutput(filename, results):
 
 
 if __name__ == '__main__':
-    inputQueries_, inputSentences_ = getInput('./input.txt')
+    inputQueries_, inputSentences_ = getInput('input.txt')
     knowledgeBase = KB(inputSentences_)
     knowledgeBase.prepareKB()
     results_ = knowledgeBase.askQueries(inputQueries_)
