@@ -1,3 +1,3 @@
-Artificial Intelligence (18CSC305J)
+# Artificial Intelligence (18CSC305J)
 
 ![](index.PNG)
