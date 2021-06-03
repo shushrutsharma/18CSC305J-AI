@@ -261,7 +261,7 @@ def printOutput(filename, results):
 
 
 if __name__ == '__main__':
-    inputQueries_, inputSentences_ = getInput('input.txt')
+    inputQueries_, inputSentences_ = getInput('C:/shushrut/studies/SRM University/SEM 6/AI/7-Unification Resolutiion/Resolution/Input/input_1.txt')
     knowledgeBase = KB(inputSentences_)
     knowledgeBase.prepareKB()
     results_ = knowledgeBase.askQueries(inputQueries_)
